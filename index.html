@@ -1,116 +1,145 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mehdi Benkaouz — IT Specialist</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mehdi Benkaouz — CV</title>
   <style>
-    body {
-      font-family: "Inter", sans-serif;
-      background-color: #f5f1e8;
-      color: #1a1a1a;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-    }
+    :root { --accent:#571929; --bg:#f5f1e8; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#222;line-height:1.6}
+    /* Header very slim */
+    header{background:var(--accent);color:#fff;text-align:center;padding:18px 16px}
+    header h1{font-size:1.6rem;font-weight:700;letter-spacing:.3px}
 
-    header {
-      background-color: #571929;
-      color: #fff;
-      text-align: center;
-      padding: 50px 20px;
-    }
-
-    header h1 {
-      font-size: 2.2em;
-      margin-bottom: 0.2em;
-    }
-
-    header p {
-      font-size: 1.1em;
-      opacity: 0.9;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    section {
-      margin-bottom: 40px;
-    }
-
-    h2 {
-      color: #571929;
-      border-bottom: 2px solid #57192933;
-      padding-bottom: 5px;
-    }
-
-    a {
-      color: #571929;
-      text-decoration: none;
-    }
-    a:hover { text-decoration: underline; }
-
-    footer {
-      text-align: center;
-      font-size: 0.9em;
-      color: #555;
-      margin-bottom: 30px;
-    }
+    main{max-width:860px;margin:36px auto;padding:0 20px}
+    h2{color:var(--accent);margin:28px 0 8px;border-bottom:2px solid #57192933;padding-bottom:6px;font-size:1.15rem}
+    p,li{font-size:1.02rem;margin-top:8px}
+    ul{margin-left:18px;list-style:square}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .grid{display:grid;gap:18px}
+    .two-col{grid-template-columns:1fr 1fr}
+    .muted{color:#555}
+    .tag{display:inline-block;border:1px solid #57192955;color:#571929;padding:2px 8px;border-radius:999px;font-size:.86rem;margin:4px 6px 0 0}
+    footer{margin:44px 0 28px;text-align:center;color:#555;font-size:.92rem}
+    /* Mobile */
+    @media (max-width:720px){ .two-col{grid-template-columns:1fr} }
   </style>
 </head>
-
 <body>
   <header>
     <h1>Mehdi Benkaouz</h1>
-    <p>IT Specialist — Linux • AD/SCCM • Networking • Automazione</p>
   </header>
 
   <main>
+    <!-- ABOUT -->
     <section>
-      <h2>Chi sono</h2>
+      <h2>About</h2>
       <p>
-        IT Specialist con esperienza in ambienti enterprise (Toyota, Aubay, GPI). 
-        Mi occupo di infrastrutture Linux/Windows, Active Directory, SCCM, reti TCP/IP e backup. 
-        Approccio logico e ordinato: riduco le attività ripetitive con script e procedure standardizzate.
+        My name is Mehdi Benkaouz, I am a 25 y/o computer scientist mainly interested in Theoretical and Computational Computer Science and related fields. I raised in Bologna, Italy, where I graduated from high school.
+      </p>
+      <p>
+        I’m an infrastructure–minded IT professional with a calm, methodical approach: I like to reduce noise and variance in systems through clear structure, documentation, and small, effective automations. Comfortable across Linux/Windows environments, Active Directory & SCCM imaging/patching, TCP/IP networking and endpoint protection. I keep my knowledge base tidy and reproducible so that incidents turn into documented runbooks rather than recurring tickets.
       </p>
     </section>
 
+    <!-- CORE SKILLS -->
     <section>
-      <h2>Competenze principali</h2>
+      <h2>Core Skills</h2>
+      <div class="grid two-col">
+        <ul>
+          <li>Linux & Windows administration, imaging and hardening</li>
+          <li>Active Directory (users, GPO) & SCCM/MDT deployments</li>
+          <li>Networking: TCP/IP, DNS, DHCP, VPN, VLAN, basic routing</li>
+          <li>Backup & Recovery with Acronis; integrity testing</li>
+          <li>Bash / PowerShell for light automation</li>
+        </ul>
+        <ul>
+          <li>Ticketing/ITSM, triage and KB/runbook writing</li>
+          <li>Firewall basics (incl. Fortinet exposure), endpoint security</li>
+          <li>Tools: Wireshark, CMDB practices, imaging with Rufus</li>
+          <li>Docs & process standardization; MTTR reduction mindset</li>
+          <li>Basic low-level exposure on industrial devices (Telnet, embedded access)</li>
+        </ul>
+      </div>
+      <div style="margin-top:6px">
+        <span class="tag">Active Directory</span>
+        <span class="tag">SCCM / MDT</span>
+        <span class="tag">Acronis</span>
+        <span class="tag">TCP/IP • DNS • VPN</span>
+        <span class="tag">Bash • PowerShell</span>
+        <span class="tag">Wireshark</span>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section>
+      <h2>Professional Experience</h2>
+
+      <p><strong>ICT Developer</strong> — Toyota Material Handling Italia <span class="muted">(2025)</span><br/>
+      Managed AD users/GPO and SCCM deployments; standardized software distribution and Windows 10/11 images; prepared runbooks for recurring incidents to reduce time-to-resolution.</p>
+
+      <p><strong>IT Specialist</strong> — Aubay Italia, Bologna <span class="muted">(2022–2025)</span><br/>
+      Refined networking skills (IP planning, DNS/DHCP, VLANs, basic routing); exposure to Fortinet/FortiGate; Acronis for imaging/restore/centralized backup; automated package/driver installs; Telnet access on industrial embedded devices; network diagnostics with Wireshark/Nirsoft tools.</p>
+
+      <p><strong>IT Support Technician</strong> — Roberto Nuti Group <span class="muted">(2021–2022)</span><br/>
+      Full-time assistant for endpoints, networking, inventory monitoring; cost tracking and HW selection for use-cases; documentation and onboarding checklists.</p>
+
+      <p><strong>Help Desk Technician</strong> — GPI Group (Sant’Orsola Hospital) <span class="muted">(2022)</span><br/>
+      1st line support, incident triage, creation of quick KB notes to reduce duplicate tickets.</p>
+
+      <p><strong>Documentation & Data Handling</strong> — Bologna Prosecutor’s Office <span class="muted">(project)</span><br/>
+      Document management and data analysis support in a high-accuracy environment.</p>
+    </section>
+
+    <!-- PROJECTS & LABS -->
+    <section>
+      <h2>Projects & Labs</h2>
       <ul>
-        <li>Linux / Windows Administration</li>
-        <li>Active Directory, SCCM, Power Apps</li>
-        <li>Networking (TCP/IP, DNS, VPN, Firewall)</li>
-        <li>Backup & Restore (Acronis)</li>
-        <li>Bash / PowerShell scripting</li>
+        <li><strong>Standard OS Image & Patching:</strong> reproducible Windows imaging with post-setup checklist; monthly patch cadence documented.</li>
+        <li><strong>Backup Test Plan:</strong> Acronis-based strategy with periodic integrity checks and restore drills; logs archived.</li>
+        <li><strong>Network Quick-Diag Kit:</strong> tiny toolkit/checklist for DNS/IP/VPN issues and common endpoint misconfigs.</li>
+        <li><strong>KB + Runbooks:</strong> markdown-based internal notes turning frequent incidents into step-by-step procedures.</li>
       </ul>
     </section>
 
+    <!-- EDUCATION & CERTS -->
     <section>
-      <h2>Esperienze recenti</h2>
-      <p><strong>ICT Developer</strong> — Toyota Material Handling Italia (2025)<br>
-      Active Directory, SCCM, automazione deploy, documentazione tecnica.</p>
-
-      <p><strong>Specialista IT</strong> — Aubay Italia (2022–2025)<br>
-      Firewall, TCP/IP, Acronis, procedure operative e monitoraggio di rete.</p>
+      <h2>Education & Certifications</h2>
+      <ul>
+        <li><strong>IT Technical Institute — IIS Odone Belluzzi Fioravanti</strong> (Bologna) — Diploma in Information Technology (Perito Informatico)</li>
+        <li>Selected coursework & self-study: Cloud basics (AWS concepts), Network Administration, Windows Enterprise deployment (DISM/MDT), Data analysis fundamentals</li>
+        <li>Foundation tracks (ongoing): ITIL Foundation, Microsoft MD-102 Endpoint Administrator</li>
+      </ul>
     </section>
 
+    <!-- AWARDS / EXTRAS -->
     <section>
-      <h2>Contatti</h2>
-      <p>
-        📧 <a href="mailto:mehdi.benkaouz@example.com">mehdi.benkaouz@example.com</a><br>
-        💼 <a href="https://www.linkedin.com/in/tuo-profilo">LinkedIn</a><br>
-        🗂️ <a href="CV_Mehdi_Benkaouz.pdf">Scarica il mio CV (PDF)</a>
-      </p>
+      <h2>Awards & Extras</h2>
+      <ul>
+        <li><strong>Hackathon Winner — Bologna (2019):</strong> team project on urban digitalization & sustainability.</li>
+        <li>Creative/technical tools used regularly: Photoshop, Illustrator, InDesign, After Effects, FL Studio, VS Code, Office suite.</li>
+      </ul>
+    </section>
+
+    <!-- LANGUAGES & CONTACT -->
+    <section class="grid two-col">
+      <div>
+        <h2>Languages</h2>
+        <p>Italian — Native<br/>Arabic — Native<br/>English — B1 (improving)</p>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <p>
+          Email: <a href="mailto:mehdi.benkaouz00@gmail.com">mehdi.benkaouz00@gmail.com</a><br/>
+          LinkedIn: <a href="linkedin.com/in/mehdi-benkaouz-237a761b8">linkedin.com/in/tuo-profilo</a><br/>
+          Location: Bologna, Italy (open to relocate)
+        </p>
+      </div>
     </section>
   </main>
 
-  <footer>
-    © 2025 Mehdi Benkaouz — Tutti i diritti riservati.
-  </footer>
+  <footer>© 2025 Mehdi Benkaouz — All rights reserved.</footer>
 </body>
 </html>
