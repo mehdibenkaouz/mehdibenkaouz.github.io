@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akyro — Project</title>
+  <style>
+    :root { --accent:#571929; --bg:#f5f1e8; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#222;line-height:1.6}
+    header{background:var(--accent);color:#fff;text-align:center;padding:18px 16px}
+    header h1{font-size:1.6rem;font-weight:700;letter-spacing:.3px}
+    main{max-width:860px;margin:36px auto;padding:0 20px}
+    h2{color:var(--accent);margin:28px 0 8px;border-bottom:2px solid #57192933;padding-bottom:6px;font-size:1.15rem}
+    p{font-size:1.02rem;margin-top:8px}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .grid{display:grid;gap:14px;margin-top:16px}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    @media (max-width:700px){ .grid.cols-2{grid-template-columns:1fr} }
+    img{width:100%;border-radius:10px;border:1px solid #ddd;box-shadow:0 2px 6px #0001}
+    footer{margin:44px 0 28px;text-align:center;color:#555;font-size:.92rem}
+    .muted{color:#666;font-size:.9rem;margin-top:4px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Akyro — Document Intelligence App</h1>
+    <p style="margin-top:6px;font-size:.95rem">
+      <a href="/projects.html" style="color:#fff;text-decoration:underline">← Back to Projects</a>
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Overview</h2>
+      <p>
+        <strong>Akyro</strong> is a Python/PyQt6 desktop application designed for intelligent document management.  
+        It converts PDFs and DOCX into a custom editable format (<code>.akr</code>), allowing advanced editing, merging, and OCR-based recognition.  
+        Its UI is built for simplicity, clarity, and performance — similar in feel to InDesign, but focused on speed and automation.
+      </p>
+      <p class="muted">© 2025 Mehdi Benkaouz. Screenshots below show only the interface; no source code or algorithms are public.</p>
+    </section>
+
+    <section>
+      <h2>Interface Previews</h2>
+      <div class="grid cols-2">
+        <img src="/assets/akyro/shot-01.png" alt="Akyro Home Screen — drag & drop import"/>
+        <img src="/assets/akyro/shot-02.png" alt="Akyro Merge Manager — combine PDFs and DOCX"/>
+        <img src="/assets/akyro/shot-03.png" alt="Akyro Editor — editable paragraph cells"/>
+        <img src="/assets/akyro/shot-04.png" alt="Akyro OCR — scanned PDF text recognition"/>
+      </div>
+    </section>
+
+    <section>
+      <h2>Technical Highlights</h2>
+      <ul style="margin-left:18px;list-style:square">
+        <li>Built in <strong>Python 3.11</strong> with <strong>PyQt6</strong> for the GUI.</li>
+        <li>Automatic PDF/DOCX import and conversion to <code>.akr</code> proprietary format.</li>
+        <li>Integrated <strong>OCR</strong> for scanned documents (Tesseract-based).</li>
+        <li>Internal database to store metadata and file associations.</li>
+        <li>Editable paragraph widgets with drag-and-drop images and layout control.</li>
+        <li>Secure architecture: logic separated from UI; no open-source code distributed.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>© 2025 Mehdi Benkaouz — All rights reserved.</footer>
+</body>
+</html>
