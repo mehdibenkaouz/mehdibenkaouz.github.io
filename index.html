@@ -5,27 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mehdi Benkaouz — CV</title>
   <style>
-    :root { --accent:#571929; --bg:#f5f1e8; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#222;line-height:1.6}
-    /* Header very slim */
-    header{background:var(--accent);color:#fff;text-align:center;padding:18px 16px}
-    header h1{font-size:1.6rem;font-weight:700;letter-spacing:.3px}
+  :root { --accent:#571929; --bg:#f5f1e8; }
 
-    main{max-width:860px;margin:36px auto;padding:0 20px}
-    h2{color:var(--accent);margin:28px 0 8px;border-bottom:2px solid #57192933;padding-bottom:6px;font-size:1.15rem}
-    p,li{font-size:1.02rem;margin-top:8px}
-    ul{margin-left:18px;list-style:square}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .grid{display:grid;gap:18px}
-    .two-col{grid-template-columns:1fr 1fr}
-    .muted{color:#555}
-    .tag{display:inline-block;border:1px solid #57192955;color:#571929;padding:2px 8px;border-radius:999px;font-size:.86rem;margin:4px 6px 0 0}
-    footer{margin:44px 0 28px;text-align:center;color:#555;font-size:.92rem}
-    /* Mobile */
-    @media (max-width:720px){ .two-col{grid-template-columns:1fr} }
-  </style>
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--bg); color:#222; line-height:1.6;
+    padding-top:72px; /* spazio per l'header fisso */
+  }
+
+  /* Header slim e fisso */
+  header{
+    background:var(--accent); color:#fff; text-align:center; padding:18px 16px;
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
+  }
+  header h1{ font-size:1.6rem; font-weight:700; letter-spacing:.3px; }
+
+  /* Layout principale */
+  main{ max-width:860px; margin:36px auto; padding:0 20px; }
+  h2{
+    color:var(--accent); margin:28px 0 8px; border-bottom:2px solid #57192933;
+    padding-bottom:6px; font-size:1.15rem;
+  }
+  p,li{ font-size:1.02rem; margin-top:8px; }
+  ul{ margin-left:18px; list-style:square; }
+
+  a{ color:var(--accent); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+
+  .grid{ display:grid; gap:18px; }
+  .two-col{ grid-template-columns:1fr 1fr; }
+
+  .muted{ color:#555; }
+  .tag{
+    display:inline-block; border:1px solid #57192955; color:#571929;
+    padding:2px 8px; border-radius:999px; font-size:.86rem; margin:4px 6px 0 0;
+  }
+
+  footer{ margin:44px 0 28px; text-align:center; color:#555; font-size:.92rem; }
+
+  /* Pulsanti download affiancati */
+  .btn-row{
+    display:flex; gap:12px; justify-content:center; align-items:center;
+    flex-wrap:wrap; margin-top:16px;
+  }
+  .btn{
+    display:inline-block; background:var(--accent); color:#fff;
+    padding:8px 16px; border-radius:6px; text-decoration:none;
+    transition:transform .08s ease, opacity .2s ease;
+  }
+  .btn:hover{ text-decoration:none; opacity:.92; transform:translateY(-1px); }
+
+  /* Mobile */
+  @media (max-width:720px){
+    .two-col{ grid-template-columns:1fr; }
+  }
+</style>
+
 </head>
 <body>
   <header>
@@ -51,19 +88,12 @@
       </p>
     </section>
               
-<p style="margin-top:16px;">
-  <a href="CV_eng.pdf" download
-     style="background:#571929;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;">
-     ⬇️ Download my CV (PDF)
-  </a>
+<div class="btn-row">
+  <a href="CV_eng.pdf" download class="btn">⬇️ Download my CV (PDF)</a>
+  <a href="CV_ita.pdf" download class="btn">⬇️ Download my CV 🇮🇹 (PDF)</a>
+</div>
 
 
-  
-  <a href="CV_ita.pdf" download
-     style="background:#571929;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;">
-     ⬇️ Download my CV 🇮🇹 (PDF)
-  </a>
-</p>
 
     <!-- CORE SKILLS -->
     <section>
