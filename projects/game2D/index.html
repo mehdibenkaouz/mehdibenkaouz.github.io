@@ -3,73 +3,544 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>2D Game</title>
+  <meta name="color-scheme" content="light dark">
+  <title>2D Game — Project</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
-    :root { --accent:#571929; --bg:#f5f1e8; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#222;line-height:1.6}
-    header{background:var(--accent);color:#fff;text-align:center;padding:18px 16px}
-    header h1{font-size:1.6rem;font-weight:700;letter-spacing:.3px}
-    main{max-width:860px;margin:36px auto;padding:0 20px}
-    h2{color:var(--accent);margin:28px 0 8px;border-bottom:2px solid #57192933;padding-bottom:6px;font-size:1.15rem}
-    p{font-size:1.02rem;margin-top:8px}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .grid{display:grid;gap:14px;margin-top:16px}
-    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
-    @media (max-width:700px){ .grid.cols-2{grid-template-columns:1fr} }
-    img{width:100%;border-radius:10px;border:1px solid #ddd;box-shadow:0 2px 6px #0001}
-    footer{margin:44px 0 28px;text-align:center;color:#555;font-size:.92rem}
-    .muted{color:#666;font-size:.9rem;margin-top:4px}
+    :root{
+      --accent:#571929;
+      --bg:#f5f1e8;
+      --ink:#141414;
+      --muted:#5a5855;
+
+      --card:rgba(255,255,255,.62);
+      --card-strong:rgba(255,255,255,.78);
+      --stroke:rgba(20,20,20,.10);
+
+      --shadow:0 18px 50px rgba(0,0,0,.12);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.10);
+
+      --radius:22px;
+      --radius-sm:16px;
+      --max:1120px;
+      --blur:22px;
+
+      --nav-h:78px;
+    }
+
+    [data-theme="dark"]{
+      --bg:#0f0f10;
+      --ink:#f4f2ee;
+      --muted:rgba(244,242,238,.74);
+
+      --card:rgba(24,24,26,.58);
+      --card-strong:rgba(24,24,26,.72);
+      --stroke:rgba(244,242,238,.12);
+
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.42);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    /* Background */
+    .bg{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:-2;
+      background:
+        radial-gradient(1000px 700px at 15% 10%, color-mix(in oklab, var(--accent) 26%, transparent) 0%, transparent 60%),
+        radial-gradient(900px 700px at 85% 15%, rgba(140, 79, 92, .18) 0%, transparent 62%),
+        radial-gradient(900px 700px at 50% 90%, rgba(140, 79, 92, .14) 0%, transparent 62%),
+        linear-gradient(180deg, color-mix(in oklab, var(--bg) 86%, #ffffff 14%), var(--bg));
+    }
+    .blob{
+      position:absolute;
+      width:52vmin; height:52vmin;
+      border-radius:999px;
+      filter: blur(var(--blur));
+      opacity:.65;
+      transform: translate3d(0,0,0);
+      mix-blend-mode:multiply;
+      will-change: transform;
+    }
+    [data-theme="dark"] .blob{ mix-blend-mode:screen; opacity:.45; }
+    .blob.b1{ left:-10vmin; top:6vmin; background: color-mix(in oklab, var(--accent) 55%, #ffb7c8 45%); }
+    .blob.b2{ right:-12vmin; top:-8vmin; background: color-mix(in oklab, var(--accent) 35%, #b2d1ff 65%); }
+    .blob.b3{ left:10vmin; bottom:-16vmin; background: color-mix(in oklab, var(--accent) 35%, #ffeaa6 65%); }
+
+    .grain{
+      position:fixed; inset:-20%;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.12;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      transform: rotate(6deg);
+    }
+    [data-theme="dark"] .grain{ opacity:.10; }
+
+    .cursor-glow{
+      position:fixed;
+      width:520px; height:520px;
+      left:0; top:0;
+      transform: translate(-50%, -50%);
+      pointer-events:none;
+      border-radius:999px;
+      background: radial-gradient(circle at center,
+        color-mix(in oklab, var(--accent) 26%, transparent) 0%,
+        transparent 60%);
+      opacity:.55;
+      filter: blur(10px);
+      z-index:-1;
+      transition: opacity .25s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .blob, .cursor-glow{ display:none; }
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; padding: 0 22px; }
+    .spacer{ height: calc(var(--nav-h) + 18px); }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(16px);
+      background: color-mix(in oklab, var(--bg) 82%, transparent);
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .nav{
+      height:var(--nav-h);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 260px;
+    }
+    .monogram{
+      width:40px; height:40px;
+      min-width:40px; min-height:40px;
+      flex-shrink:0;
+      border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 30%, #ffffff 70%));
+      box-shadow: var(--shadow-soft);
+      display:grid; place-items:center;
+      color:white;
+      font-weight:900;
+      letter-spacing:.2px;
+      user-select:none;
+    }
+    .brand .name{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .brand .name strong{ font-size:1.02rem; letter-spacing:.1px; }
+    .brand .name span{ font-size:.86rem; color:var(--muted); font-weight:600; }
+
+    .nav-actions{
+      display:flex; align-items:center; gap:10px;
+      min-width: 260px; justify-content:flex-end;
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: var(--card-strong);
+      color: var(--ink);
+      text-decoration:none;
+      font-weight:800;
+      font-size:.92rem;
+      box-shadow: var(--shadow-soft);
+      transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
+      backdrop-filter: blur(14px);
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 26%, #ffffff 74%));
+      color:#fff;
+      border-color: color-mix(in oklab, var(--accent) 40%, transparent);
+    }
+    .btn.ghost{
+      box-shadow:none;
+      background: color-mix(in oklab, var(--bg) 66%, transparent);
+    }
+
+    .theme-toggle{
+      width:44px; height:44px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: var(--card-strong);
+      display:grid; place-items:center;
+      box-shadow: var(--shadow-soft);
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .2s ease;
+      backdrop-filter: blur(14px);
+      user-select:none;
+      font-weight:900;
+    }
+    .theme-toggle:hover{ transform: translateY(-1px); box-shadow: var(--shadow); }
+
+    /* Cards */
+    .card{
+      position:relative;
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: var(--card);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(16px);
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 320px at 18% 20%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 62%),
+        radial-gradient(500px 360px at 88% 18%, rgba(140, 79, 92, .14), transparent 64%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .card > *{ position:relative; }
+
+    /* Hero */
+    .hero{ padding: 44px 0 18px; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .brand{ min-width:auto; }
+      .nav-actions{ min-width:auto; }
+    }
+
+    .headline{
+      font-size: clamp(1.65rem, 2.5vw, 2.55rem);
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      margin: 0;
+      font-weight: 900;
+    }
+    .headline .accent{
+      background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 18%, var(--ink) 82%));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .subline{
+      margin-top:12px;
+      color:var(--muted);
+      font-weight:560;
+      font-size: 1.02rem;
+      max-width: 70ch;
+    }
+
+    .meta-row{ margin-top:18px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .chip{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: color-mix(in oklab, var(--bg) 66%, transparent);
+      backdrop-filter: blur(14px);
+      font-weight: 800;
+      color: color-mix(in oklab, var(--ink) 88%, var(--muted) 12%);
+      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+    }
+    .chip small{ font-weight:700; color:var(--muted); }
+
+    /* Video card */
+    .video{
+      padding: 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .video .frame{
+      position:relative;
+      border-radius: 18px;
+      overflow:hidden;
+      border:1px solid var(--stroke);
+      background: var(--card-strong);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      backdrop-filter: blur(14px);
+    }
+    .video video{
+      width:100%;
+      display:block;
+      border-radius: 18px;
+      background:#000;
+    }
+    .video .cap{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: color-mix(in oklab, var(--bg) 72%, transparent);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
+    }
+    .video .cap strong{ font-size:.95rem; letter-spacing:.1px; }
+    .video .cap span{ font-size:.86rem; color:var(--muted); font-weight:650; white-space:nowrap; }
+
+    /* Sections */
+    section{ margin: 18px 0; }
+    .section{ padding: 22px; }
+    .section h2{
+      margin:0 0 10px;
+      font-size: 1.18rem;
+      letter-spacing:.1px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent) 18%, transparent);
+    }
+
+    .muted{
+      color: var(--muted);
+      font-size: .92rem;
+      margin-top: 6px;
+      font-weight: 560;
+    }
+
+    /* Highlights list */
+    .hl{
+      display:grid;
+      gap:10px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .hl li{
+      padding:12px 12px;
+      border-radius: var(--radius-sm);
+      border:1px solid var(--stroke);
+      background: var(--card-strong);
+      box-shadow: 0 10px 26px rgba(0,0,0,.08);
+      backdrop-filter: blur(14px);
+    }
+    .hl li b{ color: color-mix(in oklab, var(--ink) 84%, var(--accent) 16%); }
+
+    /* Reveal */
+    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .8s cubic-bezier(.22,.82,.12,1), transform .8s cubic-bezier(.22,.82,.12,1); }
+    .reveal.in{ opacity:1; transform: translateY(0); }
+
+    footer{
+      padding: 28px 0 34px;
+      color:var(--muted);
+      text-align:center;
+      font-weight:600;
+    }
+
+    @media print{
+      header,.bg,.grain,.cursor-glow,.theme-toggle{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      .card{ box-shadow:none; background:#fff; border:1px solid #ddd; }
+      a{ color:#000; text-decoration:none; }
+      .wrap{ max-width: 900px; }
+    }
   </style>
 </head>
-<body>
+
+<body data-theme="light">
+  <div class="bg" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true" id="cursorGlow"></div>
+
   <header>
-    <h1>2D Game</h1>
-    <p style="margin-top:6px;font-size:.95rem">
-      <a href="/projects.html" style="color:#fff;text-decoration:underline">← Back to Projects</a>
-    </p>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="monogram" aria-hidden="true">2D</div>
+        <div class="name">
+          <strong>2D Game</strong>
+          <span>Unity — Infinite Rooms</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a class="btn ghost" href="/projects.html">← Back to Projects</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Theme">◐</button>
+        <a class="btn primary" href="#demo">Watch demo ↓</a>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section>
-      <h2>Overview</h2>
-      <p>
-        <strong>2D Infinite Room Generator – Unity Game (C#)</strong>
-        <br>
-        </bR>Developed a procedural 2D game environment in Unity featuring an infinite sequence of dynamically generated rooms.
-Implemented a centralized Room Manager system to instantiate, recycle, and scale rooms in real time, including illusion-based transitions and variable zoom effects.
-Integrated smooth camera control, dynamic player scaling, and parameter-driven speed adjustments to ensure consistent gameplay feel across infinite levels.
-Optimized performance with coroutine-based transitions, adaptive scaling, and efficient memory management through active room lists and on-demand destruction.
-Technologies: Unity, C#, Coroutines, Prefabs, Procedural Generation, 2D Camera Systems, Object Pooling
-      </p>
-      <p class="muted">© 2025 Mehdi Benkaouz. The video below show only the interface; no source code or algorithms are public.</p>
-    </section>
+  <main class="wrap">
+    <div class="spacer"></div>
 
-    <section>
-      <h2>Interface Previews</h2>
-      <div class="grid cols-2">
-        <video
-  src="/assets/2DGame/Videogioco1.mp4"
-  controls
-  playsinline
-  preload="metadata"
-  poster="/assets/2DGame/Videogioco1.PNG"
-  style="width: 480px; height: auto; border-radius: 12px;">
-  Sorry, your browser doesn't support embedded videos.
-          
-</video>
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="card reveal">
+          <div style="padding:26px 26px 20px;">
+            <h1 class="headline">
+              A procedural <span class="accent">2D infinite room generator</span> built in Unity —
+              smooth transitions, scalable rooms, and a consistent gameplay feel.
+            </h1>
+
+            <p class="subline">
+              Developed an infinite sequence of dynamically generated rooms using a centralized <b>Room Manager</b>.
+              Rooms are instantiated, recycled, and scaled in real time, with illusion-based transitions and variable zoom.
+              The system includes smooth camera control, player scaling, and parameter-driven speed adjustments.
+              Performance is optimized with coroutine-driven transitions and efficient room lifecycle management.
+            </p>
+
+            <div class="meta-row">
+              <div class="chip">🎮 Unity • C#</div>
+              <div class="chip">🧠 Procedural generation</div>
+              <div class="chip">🎥 2D camera systems</div>
+              <div class="chip">♻️ Pooling mindset</div>
+            </div>
+
+            <p class="muted">© 2025 Mehdi Benkaouz. The video below shows only gameplay; no source code or algorithms are public.</p>
+          </div>
+        </div>
+
+        <aside id="demo" class="card video reveal">
+          <div class="frame" data-tilt>
+            <video
+              src="/assets/2DGame/Videogioco1.mp4"
+              controls
+              playsinline
+              preload="metadata"
+              poster="/assets/2DGame/Videogioco1.PNG">
+              Sorry, your browser doesn't support embedded videos.
+            </video>
+          </div>
+
+          <div class="cap">
+            <strong>Gameplay demo</strong>
+            <span>Infinite rooms • Smooth transitions</span>
+          </div>
+        </aside>
       </div>
     </section>
-        <h3>Technologies:</h3>
-        <p>Unity, C#, Coroutines, Prefabs, Procedural Generation, 2D Camera Systems, Object Pooling</p>
-        
-    <section>
-      
+
+    <section class="card section reveal">
+      <h2><span class="dot" aria-hidden="true"></span>Technologies</h2>
+      <ul class="hl">
+        <li><b>Unity</b> • 2D pipeline, prefabs, scene composition</li>
+        <li><b>C#</b> • managers, state, gameplay parameters</li>
+        <li><b>Coroutines</b> • smooth transitions, timed sequences, zoom control</li>
+        <li><b>Procedural generation</b> • dynamic rooms, scalable geometry</li>
+        <li><b>2D camera systems</b> • smooth tracking, zoom and illusion-based movement</li>
+        <li><b>Performance</b> • active room lists, recycle/destroy on demand</li>
       </ul>
     </section>
+
+    <footer>© 2025 Mehdi Benkaouz — All rights reserved.</footer>
   </main>
 
-  <footer>© 2025 Mehdi Benkaouz — All rights reserved.</footer>
+  <script>
+    (function(){
+      const body = document.body;
+
+      // Theme
+      const savedTheme = localStorage.getItem("mb_theme");
+      if(savedTheme === "dark" || savedTheme === "light"){
+        body.setAttribute("data-theme", savedTheme);
+      } else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        body.setAttribute("data-theme", prefersDark ? "dark" : "light");
+      }
+
+      document.getElementById("themeToggle")?.addEventListener("click", () => {
+        const next = body.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        body.setAttribute("data-theme", next);
+        localStorage.setItem("mb_theme", next);
+      });
+
+      // Reveal
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const revealEls = document.querySelectorAll(".reveal");
+
+      const io = new IntersectionObserver((entries)=>{
+        for(const ent of entries){
+          if(ent.isIntersecting){
+            ent.target.classList.add("in");
+            io.unobserve(ent.target);
+          }
+        }
+      }, { threshold: 0.14 });
+
+      revealEls.forEach(el => io.observe(el));
+
+      // Cursor glow
+      const glow = document.getElementById("cursorGlow");
+      if(glow && !prefersReduced){
+        let gx = window.innerWidth/2, gy = window.innerHeight/2;
+        let tx = gx, ty = gy;
+        window.addEventListener("pointermove", (e)=> { tx = e.clientX; ty = e.clientY; }, { passive:true });
+        const tick = () => {
+          gx += (tx - gx) * 0.10;
+          gy += (ty - gy) * 0.10;
+          glow.style.left = gx + "px";
+          glow.style.top = gy + "px";
+          requestAnimationFrame(tick);
+        };
+        tick();
+      }
+
+      // Parallax blobs
+      const blobs = document.querySelectorAll(".blob");
+      if(blobs.length && !prefersReduced){
+        window.addEventListener("scroll", ()=>{
+          const s = window.scrollY;
+          blobs.forEach((b, i)=>{
+            b.style.transform = `translate3d(0, ${Math.sin((s*0.004)+(i*1.7))*18}px, 0)`;
+          });
+        }, { passive:true });
+      }
+
+      // Tilt
+      const tiltEls = document.querySelectorAll("[data-tilt]");
+      if(!prefersReduced){
+        tiltEls.forEach(el=>{
+          let rAf = null;
+          const onMove = (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            const rx = (0.5 - y) * 4.5;
+            const ry = (x - 0.5) * 5.5;
+            if(rAf) cancelAnimationFrame(rAf);
+            rAf = requestAnimationFrame(()=>{ el.style.transform = `translateY(-2px) rotateX(${rx}deg) rotateY(${ry}deg)`; });
+          };
+          const onLeave = () => { if(rAf) cancelAnimationFrame(rAf); el.style.transform = ""; };
+          el.addEventListener("pointermove", onMove);
+          el.addEventListener("pointerleave", onLeave);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
