@@ -3,80 +3,653 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark">
   <title>Projects — Mehdi Benkaouz</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
-    :root { --accent:#571929; --bg:#f5f1e8; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#222;line-height:1.6}
-    header{background:var(--accent);color:#fff;text-align:center;padding:18px 16px}
-    header h1{font-size:1.6rem;font-weight:700;letter-spacing:.3px}
-    main{max-width:860px;margin:36px auto;padding:0 20px}
-    h2{color:var(--accent);margin:28px 0 8px;border-bottom:2px solid #57192933;padding-bottom:6px;font-size:1.15rem}
-    p{font-size:1.02rem;margin-top:8px}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .project-card{
-      background:#fff;border:1px solid #ddd;border-radius:10px;
-      padding:18px 20px;margin-bottom:20px;
-      box-shadow:0 2px 6px #0001;
-      transition:transform .2s ease, box-shadow .2s ease;
+    :root{
+      --accent:#571929;
+      --bg:#f5f1e8;
+      --ink:#141414;
+      --muted:#5a5855;
+
+      --card:rgba(255,255,255,.62);
+      --card-strong:rgba(255,255,255,.78);
+      --stroke:rgba(20,20,20,.10);
+
+      --shadow:0 18px 50px rgba(0,0,0,.12);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.10);
+
+      --radius:22px;
+      --radius-sm:16px;
+      --max:1120px;
+      --blur:22px;
+
+      --nav-h:78px;
     }
-    .project-card:hover{
-      transform:translateY(-2px);
-      box-shadow:0 4px 12px #0002;
+
+    [data-theme="dark"]{
+      --bg:#0f0f10;
+      --ink:#f4f2ee;
+      --muted:rgba(244,242,238,.74);
+
+      --card:rgba(24,24,26,.58);
+      --card-strong:rgba(24,24,26,.72);
+      --stroke:rgba(244,242,238,.12);
+
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.42);
     }
-    .tag{display:inline-block;border:1px solid #57192955;color:#571929;
-      padding:2px 8px;border-radius:999px;font-size:.85rem;margin:4px 6px 0 0}
-    footer{margin:44px 0 28px;text-align:center;color:#555;font-size:.92rem}
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    /* Background */
+    .bg{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:-2;
+      background:
+        radial-gradient(1000px 700px at 15% 10%, color-mix(in oklab, var(--accent) 26%, transparent) 0%, transparent 60%),
+        radial-gradient(900px 700px at 85% 15%, rgba(140, 79, 92, .18) 0%, transparent 62%),
+        radial-gradient(900px 700px at 50% 90%, rgba(140, 79, 92, .14) 0%, transparent 62%),
+        linear-gradient(180deg, color-mix(in oklab, var(--bg) 86%, #ffffff 14%), var(--bg));
+    }
+    .blob{
+      position:absolute;
+      width:52vmin; height:52vmin;
+      border-radius:999px;
+      filter: blur(var(--blur));
+      opacity:.65;
+      transform: translate3d(0,0,0);
+      mix-blend-mode:multiply;
+      will-change: transform;
+    }
+    [data-theme="dark"] .blob{ mix-blend-mode:screen; opacity:.45; }
+    .blob.b1{ left:-10vmin; top:6vmin; background: color-mix(in oklab, var(--accent) 55%, #ffb7c8 45%); }
+    .blob.b2{ right:-12vmin; top:-8vmin; background: color-mix(in oklab, var(--accent) 35%, #b2d1ff 65%); }
+    .blob.b3{ left:10vmin; bottom:-16vmin; background: color-mix(in oklab, var(--accent) 35%, #ffeaa6 65%); }
+
+    .grain{
+      position:fixed; inset:-20%;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.12;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      transform: rotate(6deg);
+    }
+    [data-theme="dark"] .grain{ opacity:.10; }
+
+    .cursor-glow{
+      position:fixed;
+      width:520px; height:520px;
+      left:0; top:0;
+      transform: translate(-50%, -50%);
+      pointer-events:none;
+      border-radius:999px;
+      background: radial-gradient(circle at center,
+        color-mix(in oklab, var(--accent) 26%, transparent) 0%,
+        transparent 60%);
+      opacity:.55;
+      filter: blur(10px);
+      z-index:-1;
+      transition: opacity .25s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .blob, .cursor-glow{ display:none; }
+    }
+
+    .wrap{ max-width:var(--max); margin:0 auto; padding: 0 22px; }
+    .spacer{ height: calc(var(--nav-h) + 18px); }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(16px);
+      background: color-mix(in oklab, var(--bg) 82%, transparent);
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .nav{
+      height:var(--nav-h);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 260px;
+    }
+    .monogram{
+      width:40px; height:40px;
+      min-width:40px; min-height:40px;
+      flex-shrink:0;
+      border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 30%, #ffffff 70%));
+      box-shadow: var(--shadow-soft);
+      display:grid; place-items:center;
+      color:white;
+      font-weight:900;
+      letter-spacing:.2px;
+      user-select:none;
+    }
+    .brand .name{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .brand .name strong{ font-size:1.02rem; letter-spacing:.1px; }
+    .brand .name span{ font-size:.86rem; color:var(--muted); font-weight:600; }
+
+    .nav-actions{
+      display:flex; align-items:center; gap:10px;
+      min-width: 260px; justify-content:flex-end;
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: var(--card-strong);
+      color: var(--ink);
+      text-decoration:none;
+      font-weight:800;
+      font-size:.92rem;
+      box-shadow: var(--shadow-soft);
+      transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
+      backdrop-filter: blur(14px);
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 26%, #ffffff 74%));
+      color:#fff;
+      border-color: color-mix(in oklab, var(--accent) 40%, transparent);
+    }
+    .btn.ghost{
+      box-shadow:none;
+      background: color-mix(in oklab, var(--bg) 66%, transparent);
+    }
+
+    .theme-toggle{
+      width:44px; height:44px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: var(--card-strong);
+      display:grid; place-items:center;
+      box-shadow: var(--shadow-soft);
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .2s ease;
+      backdrop-filter: blur(14px);
+      user-select:none;
+      font-weight:900;
+    }
+    .theme-toggle:hover{ transform: translateY(-1px); box-shadow: var(--shadow); }
+
+    /* Cards */
+    .card{
+      position:relative;
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: var(--card);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(16px);
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 320px at 18% 20%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 62%),
+        radial-gradient(500px 360px at 88% 18%, rgba(140, 79, 92, .14), transparent 64%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .card > *{ position:relative; }
+
+    .section{ padding: 22px; }
+    .section h1{
+      margin:0 0 8px;
+      font-size: clamp(1.6rem, 2.4vw, 2.25rem);
+      line-height:1.12;
+      letter-spacing:-.02em;
+      font-weight:900;
+    }
+    .section p{
+      margin: 10px 0 0;
+      color: color-mix(in oklab, var(--ink) 90%, var(--muted) 10%);
+      max-width: 78ch;
+      font-weight: 560;
+    }
+    .accent{
+      background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 18%, var(--ink) 82%));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+
+    .controls{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .search{
+      flex:1;
+      min-width: 220px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: color-mix(in oklab, var(--bg) 70%, transparent);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
+    }
+    .search input{
+      border:none;
+      outline:none;
+      background:transparent;
+      color:var(--ink);
+      width:100%;
+      font: inherit;
+      font-weight: 650;
+    }
+    .search .hint{ color:var(--muted); font-weight:700; font-size:.9rem; white-space:nowrap; }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: color-mix(in oklab, var(--bg) 66%, transparent);
+      backdrop-filter: blur(14px);
+      font-weight: 800;
+      color: color-mix(in oklab, var(--ink) 88%, var(--muted) 12%);
+      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
+      white-space:nowrap;
+    }
+    .chip:hover{ transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+    .chip.active{
+      background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 26%, #ffffff 74%));
+      color:#fff;
+      border-color: color-mix(in oklab, var(--accent) 40%, transparent);
+    }
+
+    /* Grid */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top: 16px;
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns: repeat(6, 1fr); } }
+    @media (max-width: 680px){ .grid{ grid-template-columns: repeat(1, 1fr); } }
+
+    .project{
+      grid-column: span 6;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: var(--card-strong);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      backdrop-filter: blur(14px);
+      transition: transform .14s ease, box-shadow .25s ease;
+      transform-style: preserve-3d;
+    }
+    .project:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+    @media (max-width: 980px){ .project{ grid-column: span 6; } }
+    @media (max-width: 680px){ .project{ grid-column: span 12; } }
+
+    .toprow{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .title{
+      margin:0;
+      font-size: 1.14rem;
+      font-weight: 900;
+      letter-spacing:.1px;
+      line-height:1.15;
+    }
+    .title a{
+      color: var(--ink);
+      text-decoration:none;
+    }
+    .title a:hover{ text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+    .badge{
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: color-mix(in oklab, var(--bg) 72%, transparent);
+      color: var(--muted);
+      font-weight: 850;
+      font-size: .82rem;
+      white-space:nowrap;
+    }
+
+    .desc{
+      margin: 10px 0 12px;
+      color: color-mix(in oklab, var(--ink) 88%, var(--muted) 12%);
+      font-weight: 560;
+    }
+
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in oklab, var(--accent) 30%, var(--stroke) 70%);
+      background: color-mix(in oklab, var(--bg) 68%, transparent);
+      color: color-mix(in oklab, var(--ink) 80%, var(--accent) 20%);
+      font-weight: 850;
+      font-size: .82rem;
+      white-space:nowrap;
+    }
+
+    .actions{
+      margin-top: 12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .mini{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: color-mix(in oklab, var(--bg) 66%, transparent);
+      text-decoration:none;
+      color: var(--ink);
+      font-weight: 850;
+      font-size: .9rem;
+      box-shadow: 0 10px 22px rgba(0,0,0,.08);
+      transition: transform .12s ease, box-shadow .2s ease;
+      white-space:nowrap;
+    }
+    .mini:hover{ transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+
+    /* Reveal */
+    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .8s cubic-bezier(.22,.82,.12,1), transform .8s cubic-bezier(.22,.82,.12,1); }
+    .reveal.in{ opacity:1; transform: translateY(0); }
+
+    footer{
+      padding: 28px 0 34px;
+      color:var(--muted);
+      text-align:center;
+      font-weight:600;
+    }
+
+    @media print{
+      header,.bg,.grain,.cursor-glow,.theme-toggle{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      .card{ box-shadow:none; background:#fff; border:1px solid #ddd; }
+      a{ color:#000; text-decoration:none; }
+      .wrap{ max-width: 900px; }
+    }
   </style>
 </head>
-<body>
+
+<body data-theme="light">
+  <div class="bg" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true" id="cursorGlow"></div>
+
   <header>
-    <h1>Projects</h1>
-    <p style="margin-top:6px;font-size:.95rem">
-      <a href="index.html" style="color:#fff;text-decoration:underline">← Back to CV</a>
-    </p>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="monogram" aria-hidden="true">MB</div>
+        <div class="name">
+          <strong>Projects</strong>
+          <span>Selected work</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a class="btn ghost" href="index.html">← Back to CV</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Theme">◐</button>
+        <a class="btn primary" href="#list">Browse ↓</a>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section>
-      <h2>Selected Technical Projects</h2>
+  <main class="wrap">
+    <div class="spacer"></div>
 
-      <div class="project-card">
-       <a href="/projects/akyro"> <h3>Akyro — Document Intelligence App</h3> </a>
-        <p>
-          A Python desktop application for intelligent document management. You can rename document stacks, merge documents, and separate documents. You can also create documents from scratch.
-The application offers the ability to convert PDFs and DOCXs to a custom editable format of your own creation (<code>.akr</code>) with OCR,
-visual text editing, and layout tools inspired by Adobe InDesign.
-It includes drag-and-drop import, a file merging system, and a PyQt6-based graphical user interface
-designed for clarity and efficiency.
+    <section class="card section reveal">
+      <h1>Selected <span class="accent">Technical</span> Projects</h1>
+      <p>
+        A curated set of projects focused on clean UX, performance, and real systems.
+        Use search + filters to quickly scan what’s relevant.
+      </p>
+
+      <div class="controls" aria-label="Project filters">
+        <div class="search" role="search">
+          <span class="hint">⌕</span>
+          <input id="q" type="search" placeholder="Search projects (e.g., OCR, Unity, PyQt)"/>
+          <span class="hint" id="count">2</span>
+        </div>
+
+        <div class="chip active" data-filter="all">All</div>
+        <div class="chip" data-filter="python">Python</div>
+        <div class="chip" data-filter="unity">Unity</div>
+        <div class="chip" data-filter="ui">UI</div>
+        <div class="chip" data-filter="ocr">OCR</div>
+      </div>
+    </section>
+
+    <section id="list" class="grid reveal" aria-label="Projects list">
+
+      <!-- Project: Akyro -->
+      <article class="project" data-tilt data-tags="python ui ocr pdf pyqt6 gui">
+        <div class="toprow">
+          <h3 class="title">
+            <a href="/projects/akyro">Akyro — Document Intelligence App</a>
+          </h3>
+          <span class="badge">Desktop</span>
+        </div>
+
+        <p class="desc">
+          A Python desktop application for intelligent document management: rename stacks, merge/separate documents,
+          convert PDF/DOCX to a proprietary editable format (<code>.akr</code>) with OCR, visual text editing and
+          layout tools inspired by InDesign — designed for clarity and efficiency.
         </p>
-        <div>
+
+        <div class="tags" aria-label="Akyro tags">
           <span class="tag">Python</span>
           <span class="tag">PyQt6</span>
           <span class="tag">OCR</span>
           <span class="tag">PDF</span>
           <span class="tag">GUI</span>
         </div>
-      </div>
 
-      <div class="project-card">
-         <a href="projects/game2D/"> <h3>Unity Exploration Game</h3></a>
-        <p>
-          A 2D exploration and transformation game developed in Unity. 
-          Your character is born in a single "room" and must explore infinite rooms.
+        <div class="actions">
+          <a class="mini" href="/projects/akyro">Open project →</a>
+        </div>
+      </article>
+
+      <!-- Project: 2D Game -->
+      <article class="project" data-tilt data-tags="unity c# ui procedural game">
+        <div class="toprow">
+          <h3 class="title">
+            <a href="projects/game2D/">Unity Exploration Game</a>
+          </h3>
+          <span class="badge">Game</span>
+        </div>
+
+        <p class="desc">
+          A 2D exploration and transformation game developed in Unity.
+          The character starts in a single “room” and explores an infinite sequence of procedurally generated rooms.
         </p>
-        <div>
+
+        <div class="tags" aria-label="Unity game tags">
           <span class="tag">Unity</span>
           <span class="tag">C#</span>
           <span class="tag">Game Design</span>
           <span class="tag">Procedural Worlds</span>
         </div>
-      </div>
+
+        <div class="actions">
+          <a class="mini" href="projects/game2D/">Open project →</a>
+        </div>
+      </article>
 
     </section>
+
+    <footer>© 2025 Mehdi Benkaouz — All rights reserved.</footer>
   </main>
 
-  <footer>© 2025 Mehdi Benkaouz — All rights reserved.</footer>
+  <script>
+    (function(){
+      const body = document.body;
+
+      // Theme
+      const savedTheme = localStorage.getItem("mb_theme");
+      if(savedTheme === "dark" || savedTheme === "light"){
+        body.setAttribute("data-theme", savedTheme);
+      } else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        body.setAttribute("data-theme", prefersDark ? "dark" : "light");
+      }
+
+      document.getElementById("themeToggle")?.addEventListener("click", () => {
+        const next = body.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        body.setAttribute("data-theme", next);
+        localStorage.setItem("mb_theme", next);
+      });
+
+      // Reveal
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const revealEls = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver((entries)=>{
+        for(const ent of entries){
+          if(ent.isIntersecting){
+            ent.target.classList.add("in");
+            io.unobserve(ent.target);
+          }
+        }
+      }, { threshold: 0.14 });
+      revealEls.forEach(el => io.observe(el));
+
+      // Cursor glow
+      const glow = document.getElementById("cursorGlow");
+      if(glow && !prefersReduced){
+        let gx = window.innerWidth/2, gy = window.innerHeight/2;
+        let tx = gx, ty = gy;
+        window.addEventListener("pointermove", (e)=> { tx = e.clientX; ty = e.clientY; }, { passive:true });
+        const tick = () => {
+          gx += (tx - gx) * 0.10;
+          gy += (ty - gy) * 0.10;
+          glow.style.left = gx + "px";
+          glow.style.top = gy + "px";
+          requestAnimationFrame(tick);
+        };
+        tick();
+      }
+
+      // Parallax blobs
+      const blobs = document.querySelectorAll(".blob");
+      if(blobs.length && !prefersReduced){
+        window.addEventListener("scroll", ()=>{
+          const s = window.scrollY;
+          blobs.forEach((b, i)=>{
+            b.style.transform = `translate3d(0, ${Math.sin((s*0.004)+(i*1.7))*18}px, 0)`;
+          });
+        }, { passive:true });
+      }
+
+      // Tilt
+      const tiltEls = document.querySelectorAll("[data-tilt]");
+      if(!prefersReduced){
+        tiltEls.forEach(el=>{
+          let rAf = null;
+          const onMove = (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            const rx = (0.5 - y) * 4.5;
+            const ry = (x - 0.5) * 5.5;
+            if(rAf) cancelAnimationFrame(rAf);
+            rAf = requestAnimationFrame(()=>{ el.style.transform = `translateY(-2px) rotateX(${rx}deg) rotateY(${ry}deg)`; });
+          };
+          const onLeave = () => { if(rAf) cancelAnimationFrame(rAf); el.style.transform = ""; };
+          el.addEventListener("pointermove", onMove);
+          el.addEventListener("pointerleave", onLeave);
+        });
+      }
+
+      // Search + filters
+      const q = document.getElementById("q");
+      const count = document.getElementById("count");
+      const chips = Array.from(document.querySelectorAll(".chip[data-filter]"));
+      const cards = Array.from(document.querySelectorAll(".project"));
+
+      let activeFilter = "all";
+
+      const apply = () => {
+        const term = (q?.value || "").trim().toLowerCase();
+        let visible = 0;
+
+        for(const c of cards){
+          const tags = (c.getAttribute("data-tags") || "").toLowerCase();
+          const text = (c.innerText || "").toLowerCase();
+
+          const matchTerm = !term || tags.includes(term) || text.includes(term);
+          const matchFilter = activeFilter === "all" || tags.includes(activeFilter);
+
+          const show = matchTerm && matchFilter;
+          c.style.display = show ? "" : "none";
+          if(show) visible++;
+        }
+        if(count) count.textContent = String(visible);
+      };
+
+      chips.forEach(ch => {
+        ch.addEventListener("click", () => {
+          chips.forEach(x => x.classList.remove("active"));
+          ch.classList.add("active");
+          activeFilter = ch.getAttribute("data-filter") || "all";
+          apply();
+        });
+      });
+
+      q?.addEventListener("input", apply);
+      apply();
+    })();
+  </script>
 </body>
 </html>
