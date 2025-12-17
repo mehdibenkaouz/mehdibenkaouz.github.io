@@ -230,6 +230,33 @@ A computer scientist is someone who fixes a problem you didn't know you had in a
     .hamburger{ display:none; }
     .mobile-drawer{ display:none; }
 
+    @media (pointer: coarse){
+      .cursor-glow{ display:none; }
+    }
+    @media (max-width: 520px){
+      .wrap{ padding: 0 14px; }
+    
+      /* Header: togli i due bottoni grandi e usa solo hamburger + toggle */
+      .nav-actions .btn{ display:none; }
+      .brand .name span{ display:none; } /* nasconde la riga “Infrastructure IT …” nello header */
+    
+      /* CTA: impila i bottoni, niente overflow */
+      .cta{ flex-direction:column; align-items:stretch; }
+      .cta .btn{ width:100%; justify-content:center; white-space:normal; }
+    
+      /* Chips: a tutta larghezza e wrap */
+      .hero-meta{ flex-direction:column; align-items:stretch; }
+      .chip{ width:100%; flex-wrap:wrap; white-space:normal; }
+    
+      /* Sezione: un po’ meno padding su mobile */
+      .section{ padding:18px; }
+    
+      /* Contact: evita “spaccature” se email/link sono lunghi */
+      .contact-item{ flex-direction:column; align-items:flex-start; }
+      .contact-item a{ overflow-wrap:anywhere; }
+      .copy{ align-self:flex-end; }
+    }
+
     @media (max-width: 980px){
       .brand{ min-width:auto; }
       .nav-actions{ min-width:auto; }
