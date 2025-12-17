@@ -613,13 +613,17 @@ V. 3.7
         display: none;
       }
     
-      /* MA lascia visibile "Progetti" */
-      .nav-actions .btn-projects{
-        display: inline-flex;
+      /* forza visibilità del bottone Projects */
+      .nav-actions a.btn.ghost[href="projects"]{
+        display: inline-flex !important;
       }
     }
 
-
+    @media (max-width: 520px){
+      .nav-actions a.btn.primary[href="#contact"]{
+        display: inline-flex !important;
+      }
+    }
   </style>
 </head>
 
