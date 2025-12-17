@@ -618,7 +618,34 @@ V. 3.2
         display: inline-flex !important;
       }
     }
+      
+    /* === MOBILE: HEADER WRAP CORRETTO === */
+    @media (max-width: 520px){
     
+      /* la navbar può andare a capo */
+      .nav{
+        white-space: normal;
+        flex-wrap: wrap;
+        row-gap: 10px;
+      }
+    
+      /* area pulsanti: occupa tutta la riga e va a capo */
+      .nav-actions{
+        width: 100%;
+        margin-left: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+    
+      /* i pulsanti possono spezzare la riga */
+      .nav-actions .btn{
+        white-space: normal;
+        flex-shrink: 0;
+      }
+    }
+
   </style>
 </head>
 
