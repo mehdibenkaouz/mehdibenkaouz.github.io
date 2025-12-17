@@ -604,6 +604,27 @@ A computer scientist is someone who fixes a problem you didn't know you had in a
     white-space: normal;
     }
 
+    /* === FIX OVERFLOW HEADER SU MOBILE === */
+    @media (max-width: 520px){
+      .nav{
+        white-space: normal;     /* era nowrap -> causa overflow */
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+    
+      .nav-actions{
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+    
+      /* i bottoni possono andare a capo senza rompere layout */
+      .btn{
+        white-space: normal;
+      }
+    }
 
   </style>
 </head>
